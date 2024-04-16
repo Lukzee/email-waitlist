@@ -1,7 +1,24 @@
 <?php
 
+// Connect to your database (Replace these values with your database credentials)
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "comfylearn";
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Check connection
+if ($conn->connect_error) {
+    // Return a response with a status code indicating an internal server error
+    http_response_code(500);
+    echo json_encode(array("error" => "Failed to connect to the database."));
+    exit();
+}
+
 // Check if the request method is POST
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if (isset($_POST['email'])) {
     // Retrieve the email from the POST data
     $email = trim($_POST["email"]);
 
@@ -15,23 +32,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Sanitize the email
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-
-    // Connect to your database (Replace these values with your database credentials)
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "comfylearn";
-
-    // Create connection
-    $conn = new mysqli($servername, $username, $password, $dbname);
-
-    // Check connection
-    if ($conn->connect_error) {
-        // Return a response with a status code indicating an internal server error
-        http_response_code(500);
-        echo json_encode(array("error" => "Failed to connect to the database."));
-        exit();
-    }
 
     // Check if the email already exists in the waitlist table
     $sql = "SELECT * FROM waitlist WHERE email = '$email'";
@@ -57,13 +57,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo json_encode(array("error" => "Failed to add email to the waitlist."));
         }
     }
+}
 
-    // Close database connection
-    $conn->close();
-} else {
-    // Return a response with a status code indicating a method not allowed
-    http_response_code(405);
-    echo json_encode(array("error" => "Method not allowed."));
+// Check if username and password are sent via POST request
+if (isset($_POST['username']) && isset($_POST['password'])) {
+    // Hard-coded username and password for demonstration
+    $hardCodedUsername = 'admin';
+    $hardCodedPassword = 'password123';
+
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Check if username and password match the hard-coded values
+    if ($username === $hardCodedUsername && $password === $hardCodedPassword) {
+        // Fetch emails and dates from the wait-list table
+        $sql = "SELECT * FROM waitlist ORDER BY registration_date DESC";
+        $result = $conn->query($sql);
+        $emails = array();
+        while ($row = mysqli_fetch_array($result)) {
+            $emails[] = array(
+                'email' => $row['email'],
+                'date' => $row['registration_date']
+            );
+        }
+        // Return JSON response with emails data
+        echo json_encode($emails);
+    } else {
+        // Return JSON response with error message
+        echo json_encode(['error' => 'Invalid username or password']);
+    }
 }
 
 ?>

@@ -3,7 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="cl.png" type="image/x-icon">
   <title>ComfyLearn - Join the Waitlist</title>
+  <!-- Twitter Card settings -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:site" content="@SoftBrein" />
+  <meta name="twitter:creator" content="@tenn_whiterose" />
+  <meta name="twitter:image" content="https://comfylearn.softbrein.tech/cl.png" />
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -68,6 +74,35 @@
     img {
       width: 100px;
     }
+
+    /* Styles for the popup */
+    .popup {
+      width: 70%;
+      margin: auto;
+      margin-top: 20px;
+      background-color: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      z-index: 1000;
+    }
+
+    /* Styles for the overlay */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      overflow-y: scroll;
+    }
+
+    a#readMoreLink {
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
@@ -81,6 +116,25 @@
       <input type="email" id="email" name="email" placeholder="Your Email Address" required><br>
       <input type="submit" value="Join">
     </form>
+    <!-- Add a link to open the popup -->
+    <br><br><a href="#" id="readMoreLink">Read more about our upcoming EdTech website</a>
+  </div>
+</div>
+
+<!-- Popup div for reading about the website -->
+<div class="overlay" id="overlay">
+  <div class="popup" id="popup">
+    <h2>About Our Upcoming EdTech Website</h2>
+    <p>At ComfyLearn, we're passionate about empowering individuals with the knowledge and skills they need to thrive in the digital age. Whether you're interested in learning the fundamentals of technology, diving into coding languages, mastering graphic design principles, or perfecting UI/UX techniques, we've got you covered.</p>
+    
+    <p>Our platform offers a diverse range of courses and resources, some available for free and others at affordable prices. Upon completion, you'll receive a certificate to showcase your newfound expertise.</p>
+
+    <p>But ComfyLearn is more than just a learning platform. We're a vibrant community where learners can connect, collaborate, and grow together. Join discussions, work on projects, or seek assistance from fellow learners and industry experts.</p>
+
+    <p>Stay updated with the latest trends and job opportunities in the tech industry through our regular updates and notifications.</p>
+
+    <p>Join us on this journey of learning and innovation. Let's shape the future of technology together.</p>
+    <button onclick="closePopup()">Close</button>
   </div>
 </div>
 
@@ -122,6 +176,17 @@
 
     document.getElementById("email").value = ""; // Clear the input field after submission
   });
+
+  // Function to open the popup
+  document.getElementById("readMoreLink").addEventListener("click", function(event) {
+    event.preventDefault();
+    document.getElementById("overlay").style.display = "block";
+  });
+
+  // Function to close the popup
+  function closePopup() {
+    document.getElementById("overlay").style.display = "none";
+  }
 </script>
 
 </body>
